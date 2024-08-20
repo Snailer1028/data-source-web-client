@@ -5,7 +5,6 @@ import com.baomidou.mybatisplus.core.toolkit.support.SFunction;
 
 import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.ObjectUtil;
-import cn.iocoder.yudao.framework.common.util.collection.ArrayUtils;
 import org.springframework.util.StringUtils;
 
 import java.util.Collection;
@@ -96,8 +95,8 @@ public class LambdaQueryWrapperX<T> extends LambdaQueryWrapper<T> {
     }
 
     public LambdaQueryWrapperX<T> betweenIfPresent(SFunction<T, ?> column, Object[] values) {
-        Object val1 = ArrayUtils.get(values, 0);
-        Object val2 = ArrayUtils.get(values, 1);
+        Object val1 = values[0];
+        Object val2 = values[1];
         return betweenIfPresent(column, val1, val2);
     }
 

@@ -31,14 +31,28 @@ import java.util.Objects;
  * 2. {@link MPJBaseMapper} 为 MyBatis Plus Join 的基础接口，提供连表 Join 能力
  */
 public interface BaseMapperX<T> extends MPJBaseMapper<T> {
-
+    /**
+     * 分页带排序和条件
+     *
+     * @param pageParam 可排序的实体
+     * @param queryWrapper 条件
+     * @return 结果
+     */
     default PageResult<T> selectPage(SortablePageParam pageParam, @Param("ew") Wrapper<T> queryWrapper) {
         return selectPage(pageParam, pageParam.getSortingFields(), queryWrapper);
     }
 
+    /**
+     * 分页只带条件
+     *
+     * @param pageParam 可排序的实体
+     * @param queryWrapper 条件
+     * @return 结果
+     */
     default PageResult<T> selectPage(PageParam pageParam, @Param("ew") Wrapper<T> queryWrapper) {
         return selectPage(pageParam, null, queryWrapper);
     }
+
 
     default PageResult<T> selectPage(PageParam pageParam, Collection<SortingField> sortingFields,
                                      @Param("ew") Wrapper<T> queryWrapper) {

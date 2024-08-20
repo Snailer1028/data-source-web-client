@@ -89,7 +89,7 @@ public class GlobalExceptionHandler {
      * 2. spring.mvc.static-path-pattern 为 /statics/**
      */
     @ExceptionHandler(NoHandlerFoundException.class)
-    public R<?> noHandlerFoundExceptionHandler(HttpServletRequest req, NoHandlerFoundException ex) {
+    public R<?> noHandlerFoundExceptionHandler(NoHandlerFoundException ex) {
         log.warn("[noHandlerFoundExceptionHandler]", ex);
         return error(HttpStatus.HTTP_NOT_FOUND, String.format("请求地址不存在: %s", ex.getRequestURL()));
     }
@@ -111,7 +111,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(value = AccessDeniedException.class)
     public R<?> accessDeniedExceptionHandler(HttpServletRequest req, AccessDeniedException ex) {
         log.warn("[accessDeniedExceptionHandler][userId({}) 无法访问 url({})]", "userid", req.getRequestURL(), ex);
-        return error(HttpStatus.HTTP_FORBIDDEN, "Test");
+        return error(HttpStatus.HTTP_FORBIDDEN, "No permission");
     }
 
     /**
@@ -137,9 +137,9 @@ public class GlobalExceptionHandler {
      * 处理系统异常，兜底处理所有的一切
      */
     @ExceptionHandler(value = Exception.class)
-    public R<?> defaultExceptionHandler(HttpServletRequest req, Throwable ex) {
+    public R<?> defaultExceptionHandler(Throwable ex) {
         log.error("[defaultExceptionHandler]", ex);
-        return error(HttpStatus.HTTP_INTERNAL_ERROR, "test");
+        return error(HttpStatus.HTTP_INTERNAL_ERROR, ex.getMessage());
     }
 
     /**
@@ -167,7 +167,7 @@ public class GlobalExceptionHandler {
             return constraintViolationExceptionHandler((ConstraintViolationException) ex);
         }
         if (ex instanceof NoHandlerFoundException) {
-            return noHandlerFoundExceptionHandler(request, (NoHandlerFoundException) ex);
+            return noHandlerFoundExceptionHandler((NoHandlerFoundException) ex);
         }
         if (ex instanceof HttpRequestMethodNotSupportedException) {
             return httpRequestMethodNotSupportedExceptionHandler((HttpRequestMethodNotSupportedException) ex);
@@ -178,6 +178,6 @@ public class GlobalExceptionHandler {
         if (ex instanceof AccessDeniedException) {
             return accessDeniedExceptionHandler(request, (AccessDeniedException) ex);
         }
-        return defaultExceptionHandler(request, ex);
+        return defaultExceptionHandler(ex);
     }
 }

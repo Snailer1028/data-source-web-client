@@ -1,6 +1,5 @@
 package com.example.demo.mapper;
 
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.example.demo.entity.PageResult;
 import com.example.demo.entity.User;
 import com.example.demo.entity.UserVO;
@@ -18,7 +17,7 @@ import org.apache.ibatis.annotations.Mapper;
 public interface UserMapper extends BaseMapperX<User> {
     default PageResult<User> selectPage(UserVO reqVO) {
         return selectPage(reqVO, new LambdaQueryWrapperX<User>()
-                .eqIfPresent(User::getName, reqVO.getName())
+                .likeIfPresent(User::getName, reqVO.getName())
                 .orderByDesc(User::getId));
     }
 }
