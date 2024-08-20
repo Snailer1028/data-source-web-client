@@ -1,5 +1,8 @@
 package com.example.demo.entity;
 
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableLogic;
+
 import lombok.Data;
 
 import java.time.LocalDateTime;
@@ -14,20 +17,22 @@ import javax.validation.constraints.Null;
 @Data
 public class BaseEntity {
     @Null(message = "不需要填 creatorId")
+    @TableField
     private Long creatorId;
 
-    @Null(message = "不需要填 creatorName")
-    private String creatorName;
-
     @Null(message = "不需要填 updaterId")
+    @TableField
     private Long updaterId;
 
-    @Null(message = "不需要填 updaterName")
-    private String updaterName;
-
     @Null(message = "不需要填 createTime")
+    @TableField
     private LocalDateTime createTime;
 
     @Null(message = "不需要填 updateTime")
+    @TableField
     private LocalDateTime updateTime;
+
+    @Null(message = "不需要填 deleted")
+    @TableLogic
+    private Integer deleted;
 }

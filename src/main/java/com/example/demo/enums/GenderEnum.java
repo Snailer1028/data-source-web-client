@@ -1,5 +1,7 @@
 package com.example.demo.enums;
 
+import com.baomidou.mybatisplus.annotation.EnumValue;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -19,6 +21,7 @@ public enum GenderEnum implements IntArrayValuable {
 
     public static final int[] ARRAYS = Arrays.stream(values()).mapToInt(GenderEnum::getType).toArray();
 
+    @EnumValue
     private final int type;
 
     @Override
