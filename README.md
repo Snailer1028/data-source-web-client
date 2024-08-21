@@ -1,5 +1,6 @@
 # Springboot 基础框架
 ```
+java 1.8
 sprinboot 2.7.18
 mybatis plus 3.5.5
 
