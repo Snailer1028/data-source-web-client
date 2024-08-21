@@ -14,7 +14,8 @@ import lombok.Getter;
 public enum ExceptionTypeEnum {
     DEFAULT_EXCEPTION_TYPE(1000, "Default Exception Type"),
 
-    DATASOURCE_DEFAULT_TYPE(1100, "数据源模块异常"),
+    VALIDATE_TYPE(1100, "接口参数异常"),
+
     DATASOURCE_VALID_TYPE(1101, "数据源模块入参校验不通过"),
     DATASOURCE_JDBC_TYPE(1102, "数据源模块中JDBC发生异常"),
     DATASOURCE_MYBATIS_TYPE(1103, "数据源模块mybatis发生异常");

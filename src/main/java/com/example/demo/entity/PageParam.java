@@ -1,5 +1,7 @@
 package com.example.demo.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.Data;
 
 import java.io.Serializable;
@@ -18,10 +20,12 @@ public class PageParam implements Serializable {
      */
     public static final Integer PAGE_SIZE_NONE = -1;
 
+    @JsonIgnore
     @NotNull(message = "页码不能为空")
     @Min(value = 1, message = "页码最小值为 1")
     private Integer pageNo = PAGE_NO;
 
+    @JsonIgnore
     @NotNull(message = "每页条数不能为空")
     @Min(value = 1, message = "每页条数最小值为 1")
     @Max(value = 100, message = "每页条数最大值为 100")

@@ -17,7 +17,7 @@ import org.apache.ibatis.annotations.Mapper;
 public interface UserMapper extends BaseMapperX<User> {
     default PageResult<User> selectPage(UserVO reqVO) {
         return selectPage(reqVO, new LambdaQueryWrapperX<User>()
-                .likeIfPresent(User::getName, reqVO.getName())
+                .likeIfPresent(User::getOwnerName, reqVO.getOwnerName())
                 .orderByDesc(User::getId));
     }
 }

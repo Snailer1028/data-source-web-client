@@ -10,7 +10,5 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 public class SortablePageParam extends PageParam {
-
     private List<SortingField> sortingFields;
-
 }

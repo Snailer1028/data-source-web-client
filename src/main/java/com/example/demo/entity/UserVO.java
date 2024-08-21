@@ -15,7 +15,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Null;
 
 /**
- * 分组校验最佳实践
+ * 分组校验最佳实践 //todo 批量操作有问题
  *
  * @author yanxingtong
  * @since 2024/8/16
@@ -25,10 +25,10 @@ import javax.validation.constraints.Null;
 public class UserVO extends PageParam{
     /** 不要使用简单类型比如 int, 它有默认值会导致@NotNull没啥作用  */
     @Null(groups = {Save.class}, message = "新增不需要填 id")
-    @NotNull(groups = {Update.class}, message = "修改必须要填 id")
+    @NotNull(groups = {Update.class}, message = "必须要填 id")
     private Integer id;
 
-    @NotBlank(message = "name 不可为空")
+    @NotBlank(groups = {Save.class}, message = "name 不可为空")
     private String name;
 
     @InEnum(value = GenderEnum.class)
@@ -40,6 +40,6 @@ public class UserVO extends PageParam{
     @Mobile
     private String phone;
 
-    @NotNull(groups = Save.class, message = "新增必须要填 ownerName")
+    @NotBlank(message = "查询必须要填 ownerName")
     private String ownerName;
 }
