@@ -9,7 +9,7 @@ import lombok.Setter;
 /**
  * 响应实体
  *
- * @param <T> 泛型参数
+ * @param <T> 泛型参数 T
  */
 @Getter
 @Setter
