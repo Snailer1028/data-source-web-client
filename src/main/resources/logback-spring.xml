@@ -5,6 +5,8 @@
 
     <!-- 控制台输出 -->
     <appender name="stdout" class="ch.qos.logback.core.ConsoleAppender">
+        <!-- 过滤器配置 -->
+        <filter class="com.example.demo.config.LogFilterConfig"/>
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
             <!-- 1格式化输出：%d表示日期，%thread表示线程名，%-5level：级别从左显示5个字符宽度%msg：日志消息，%n是换行符-->
             <pattern>%d{HH:mm:ss.SSS} [%boldYellow(%thread)] %highlight(%-5level) %green(%logger{50}) > %msg%n</pattern>
