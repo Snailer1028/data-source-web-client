@@ -6,6 +6,7 @@ import com.example.demo.entity.R;
 
 import cn.hutool.http.HttpStatus;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.validation.BindException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
@@ -22,7 +23,7 @@ import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 
 /**
- * class
+ * 全局异常处理
  *
  * @author yanxingtong
  * @since 2024/8/16
@@ -36,7 +37,7 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(value = MissingServletRequestParameterException.class)
     public R<?> missingServletRequestParameterExceptionHandler(MissingServletRequestParameterException ex) {
-        log.warn("[missingServletRequestParameterExceptionHandler]", ex);
+        log.error("[missingServletRequestParameterExceptionHandler]", ex);
         return error(HttpStatus.HTTP_BAD_REQUEST, String.format("请求参数缺失: %s", ex.getParameterName()));
     }
 
@@ -46,7 +47,7 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
     public R<?> methodArgumentTypeMismatchExceptionHandler(MethodArgumentTypeMismatchException ex) {
-        log.warn("[methodArgumentTypeMismatchExceptionHandler]", ex);
+        log.error("[methodArgumentTypeMismatchExceptionHandler]", ex);
         return error(HttpStatus.HTTP_BAD_REQUEST, String.format("请求参数类型错误: %s", ex.getMessage()));
     }
 
@@ -55,7 +56,7 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public R<?> methodArgumentNotValidExceptionExceptionHandler(MethodArgumentNotValidException ex) {
-        log.warn("[methodArgumentNotValidExceptionExceptionHandler]", ex);
+        log.error("[methodArgumentNotValidExceptionExceptionHandler]", ex);
         FieldError fieldError = ex.getBindingResult().getFieldError();
         assert fieldError != null; // 断言，避免告警
         return error(HttpStatus.HTTP_BAD_REQUEST, String.format("请求参数不正确: %s", fieldError.getDefaultMessage()));
@@ -66,7 +67,7 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(BindException.class)
     public R<?> bindExceptionHandler(BindException ex) {
-        log.warn("[bindExceptionHandler]", ex);
+        log.error("[bindExceptionHandler]", ex);
         FieldError fieldError = ex.getFieldError();
         assert fieldError != null; // 断言，避免告警
         return error(HttpStatus.HTTP_BAD_REQUEST, String.format("请求参数不正确: %s", fieldError.getDefaultMessage()));
@@ -77,7 +78,7 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(value = ConstraintViolationException.class)
     public R<?> constraintViolationExceptionHandler(ConstraintViolationException ex) {
-        log.warn("[constraintViolationExceptionHandler]", ex);
+        log.error("[constraintViolationExceptionHandler]", ex);
         ConstraintViolation<?> constraintViolation = ex.getConstraintViolations().iterator().next();
         return error(HttpStatus.HTTP_BAD_REQUEST, String.format("请求参数不正确: %s", constraintViolation.getMessage()));
     }
@@ -90,7 +91,7 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(NoHandlerFoundException.class)
     public R<?> noHandlerFoundExceptionHandler(NoHandlerFoundException ex) {
-        log.warn("[noHandlerFoundExceptionHandler]", ex);
+        log.error("[noHandlerFoundExceptionHandler]", ex);
         return error(HttpStatus.HTTP_NOT_FOUND, String.format("请求地址不存在: %s", ex.getRequestURL()));
     }
 
@@ -100,7 +101,7 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
     public R<?> httpRequestMethodNotSupportedExceptionHandler(HttpRequestMethodNotSupportedException ex) {
-        log.warn("[httpRequestMethodNotSupportedExceptionHandler]", ex);
+        log.error("[httpRequestMethodNotSupportedExceptionHandler]", ex);
         return error(HttpStatus.HTTP_BAD_METHOD, String.format("请求方法不正确: %s", ex.getMessage()));
     }
 
@@ -110,7 +111,7 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(value = AccessDeniedException.class)
     public R<?> accessDeniedExceptionHandler(HttpServletRequest req, AccessDeniedException ex) {
-        log.warn("[accessDeniedExceptionHandler][userId({}) 无法访问 url({})]", "userid", req.getRequestURL(), ex);
+        log.error("[accessDeniedExceptionHandler][userId({}) 无法访问 url({})]", "userid", req.getRequestURL(), ex);
         return error(HttpStatus.HTTP_FORBIDDEN, "No permission");
     }
 
@@ -124,13 +125,42 @@ public class GlobalExceptionHandler {
         try {
             StackTraceElement[] stackTraces = ex.getStackTrace();
             for (StackTraceElement stackTrace : stackTraces) {
-                log.warn("[serviceExceptionHandler]\n\t{}", stackTrace);
+                log.error("[serviceExceptionHandler]: {}\n{}", ex.getMsg(), stackTrace);
                 break;
             }
         } catch (Exception ignored) {
             // 忽略日志，避免影响主流程
         }
-        return error(ex.getCode(), ex.getMessage());
+        return error(ex.getCode(), ex.getMsg());
+    }
+
+    /**
+     * 处理系统异常，兜底处理所有的一切
+     */
+    @ExceptionHandler(value = NullPointerException.class)
+    public R<?> nullPointerExceptionHandler(NullPointerException e) {
+        // 即使打印，也只打印第一层 StackTraceElement，并且使用 warn 在控制台输出，更容易看到
+        try {
+            StackTraceElement[] stackTraces = e.getStackTrace();
+            for (StackTraceElement stackTrace : stackTraces) {
+                log.error("[nullPointerExceptionHandler], 异常类型:{}\n空指针方法路径: {}",
+                        e.getClass().getTypeName(),
+                        stackTrace);
+                break;
+            }
+        } catch (Exception ignored) {
+            // 忽略日志，避免影响主流程
+        }
+        return error(HttpStatus.HTTP_INTERNAL_ERROR, "服务内部异常");
+    }
+
+    /**
+     * 处理唯一键值重复
+     */
+    @ExceptionHandler(value = DuplicateKeyException.class)
+    public R<?> duplicateKeyExceptionHandler(DuplicateKeyException ex) {
+        log.error("[duplicateKeyExceptionHandler], 原因: {}", ex.getMessage());
+        return error(HttpStatus.HTTP_BAD_REQUEST, "请检查是否重复添加");
     }
 
     /**
@@ -138,8 +168,9 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(value = Exception.class)
     public R<?> defaultExceptionHandler(Throwable ex) {
-        log.error("[defaultExceptionHandler]", ex);
-        return error(HttpStatus.HTTP_INTERNAL_ERROR, ex.getMessage());
+        log.error("[全局异常捕获], 异常类型:{}, 原因:{}", ex.getClass().getTypeName(), ex.getMessage());
+        return error(HttpStatus.HTTP_INTERNAL_ERROR,
+                ex.getClass().getTypeName().concat(", ").concat(ex.getMessage()));
     }
 
     /**
@@ -174,6 +205,12 @@ public class GlobalExceptionHandler {
         }
         if (ex instanceof ServiceException) {
             return serviceExceptionHandler((ServiceException) ex);
+        }
+        if (ex instanceof NullPointerException) {
+            return nullPointerExceptionHandler((NullPointerException) ex);
+        }
+        if (ex instanceof DuplicateKeyException) {
+            return duplicateKeyExceptionHandler((DuplicateKeyException) ex);
         }
         if (ex instanceof AccessDeniedException) {
             return accessDeniedExceptionHandler(request, (AccessDeniedException) ex);

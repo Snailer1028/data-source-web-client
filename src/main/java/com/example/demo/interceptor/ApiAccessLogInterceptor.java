@@ -23,8 +23,6 @@ import java.util.stream.IntStream;
 /**
  * API 访问日志 Interceptor
  * 目的：在非 prod 环境时，打印 request 和 response 两条日志到日志文件（控制台）中。
- *
- * @author 芋道源码
  */
 @Slf4j
 @SuppressWarnings("NullableProblems")
@@ -96,7 +94,7 @@ public class ApiAccessLogInterceptor implements HandlerInterceptor {
                 return;
             }
             // 打印结果
-            System.out.printf("当前Controller方法路径：%s(%s.java:%d)\n", clazz.getName(), clazz.getSimpleName(),
+            System.out.printf("当前Controller方法路径: %s(%s.java:%d)\n", clazz.getName(), clazz.getSimpleName(),
                     lineNumber.get());
         } catch (Exception ignore) {
             // 忽略异常。原因：仅仅打印，非重要逻辑
