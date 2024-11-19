@@ -1,6 +1,7 @@
-package com.example.demo.entity;
+package com.example.demo.model.req;
 
 import com.example.demo.enums.GenderEnum;
+import com.example.demo.model.entity.PageParam;
 import com.example.demo.validator.InEnum;
 import com.example.demo.validator.Mobile;
 import com.example.demo.validator.Save;
@@ -22,7 +23,7 @@ import javax.validation.constraints.Null;
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
-public class UserVO extends PageParam{
+public class UserVO extends PageParam {
     /** 不要使用简单类型比如 int, 它有默认值会导致@NotNull没啥作用  */
     @Null(groups = {Save.class}, message = "新增不需要填 id")
     @NotNull(groups = {Update.class}, message = "必须要填 id")

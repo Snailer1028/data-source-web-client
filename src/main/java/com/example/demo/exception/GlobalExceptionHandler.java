@@ -2,7 +2,7 @@ package com.example.demo.exception;
 
 import static com.example.demo.util.ResponseUtils.exception;
 
-import com.example.demo.entity.R;
+import com.example.demo.model.entity.R;
 
 import cn.hutool.http.HttpStatus;
 import lombok.extern.slf4j.Slf4j;

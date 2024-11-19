@@ -1,6 +1,6 @@
 package com.example.demo.util;
 
-import com.example.demo.entity.PageResult;
+import com.example.demo.model.entity.PageResult;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollUtil;

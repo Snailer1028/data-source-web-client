@@ -2,8 +2,8 @@ package com.example.demo.util;
 
 import com.baomidou.mybatisplus.core.metadata.OrderItem;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.example.demo.entity.PageParam;
-import com.example.demo.entity.SortingField;
+import com.example.demo.model.entity.PageParam;
+import com.example.demo.model.entity.SortingField;
 
 import cn.hutool.core.collection.CollectionUtil;
 

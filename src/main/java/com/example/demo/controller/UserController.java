@@ -3,10 +3,10 @@ package com.example.demo.controller;
 import static com.example.demo.util.ResponseUtils.exception;
 import static com.example.demo.util.ResponseUtils.success;
 
-import com.example.demo.entity.PageResult;
-import com.example.demo.entity.R;
-import com.example.demo.entity.UserEntity;
-import com.example.demo.entity.UserVO;
+import com.example.demo.model.entity.PageResult;
+import com.example.demo.model.entity.R;
+import com.example.demo.model.entity.UserEntity;
+import com.example.demo.model.req.UserVO;
 import com.example.demo.mapper.UserMapper;
 import com.example.demo.util.BeanUtils;
 import com.example.demo.validator.Save;

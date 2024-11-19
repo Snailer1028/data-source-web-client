@@ -1,8 +1,8 @@
 package com.example.demo.mapper;
 
-import com.example.demo.entity.PageResult;
-import com.example.demo.entity.UserEntity;
-import com.example.demo.entity.UserVO;
+import com.example.demo.model.entity.PageResult;
+import com.example.demo.model.entity.UserEntity;
+import com.example.demo.model.req.UserVO;
 import com.example.demo.mapper.query.LambdaQueryWrapperX;
 
 import org.apache.ibatis.annotations.Mapper;
