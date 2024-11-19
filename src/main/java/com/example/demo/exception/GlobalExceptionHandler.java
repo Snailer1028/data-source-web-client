@@ -4,6 +4,9 @@ import static com.example.demo.util.ResponseUtils.exception;
 
 import com.example.demo.model.entity.R;
 
+import cn.dev33.satoken.exception.NotLoginException;
+import cn.dev33.satoken.exception.NotPermissionException;
+import cn.dev33.satoken.exception.NotRoleException;
 import cn.hutool.http.HttpStatus;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DuplicateKeyException;
@@ -161,6 +164,33 @@ public class GlobalExceptionHandler {
     public R<?> duplicateKeyExceptionHandler(DuplicateKeyException ex) {
         log.error("[duplicateKeyExceptionHandler], 原因: {}", ex.getMessage());
         return exception(HttpStatus.HTTP_BAD_REQUEST, "请检查是否重复添加");
+    }
+
+    /**
+     * 处理没有登录
+     */
+    @ExceptionHandler(value = NotLoginException.class)
+    public R<?> notLoginExceptionHandler(NotLoginException ex) {
+        log.error("[notLoginExceptionHandler], 原因: {}", ex.getMessage());
+        return exception(HttpStatus.HTTP_FORBIDDEN, "会话失效, 请重新登录");
+    }
+
+    /**
+     * 处理没有角色
+     */
+    @ExceptionHandler(value = NotRoleException.class)
+    public R<?> notRoleExceptionHandler(NotRoleException ex) {
+        log.error("[notRoleExceptionHandler], 原因: {}", ex.getMessage());
+        return exception(HttpStatus.HTTP_FORBIDDEN, "UNAUTHORIZED");
+    }
+
+    /**
+     * 处理没有权限
+     */
+    @ExceptionHandler(value = NotPermissionException.class)
+    public R<?> notPermissionExceptionHandler(NotPermissionException ex) {
+        log.error("[notPermissionExceptionHandler], 原因: {}", ex.getMessage());
+        return exception(HttpStatus.HTTP_FORBIDDEN, ex.getMessage());
     }
 
     /**

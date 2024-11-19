@@ -123,11 +123,6 @@ public class UserController {
 
     @GetMapping("/info")
     public R<SaTokenInfo> getInfo() {
-        int userId = StpUtil.getLoginIdAsInt();
-        System.out.println("userId = " + userId);
-
-        // 获取当前会话的 token 信息参数
-        SaTokenInfo tokenInfo = StpUtil.getTokenInfo();
-        return success(tokenInfo);
+        return success(StpUtil.getTokenInfo());
     }
 }
