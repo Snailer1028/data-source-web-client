@@ -29,7 +29,9 @@ public class UserVO extends PageParam{
     private Integer id;
 
     @NotBlank(groups = {Save.class}, message = "name 不可为空")
-    private String name;
+    private String username;
+
+    private String password;
 
     @InEnum(value = GenderEnum.class)
     private Integer gender;
@@ -39,7 +41,4 @@ public class UserVO extends PageParam{
 
     @Mobile
     private String phone;
-
-    @NotBlank(message = "查询必须要填 ownerName")
-    private String ownerName;
 }

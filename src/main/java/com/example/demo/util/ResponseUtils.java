@@ -62,8 +62,8 @@ public class ResponseUtils {
      * @param msg 描述信息
      * @return ResponseEntity
      */
-    public static R<Void> error(String msg) {
-        return error(HttpStatus.INTERNAL_SERVER_ERROR.value(), msg);
+    public static R<Void> exception(String msg) {
+        return exception(HttpStatus.INTERNAL_SERVER_ERROR.value(), msg);
     }
 
     /**
@@ -74,8 +74,8 @@ public class ResponseUtils {
      * @return ResponseEntity
      * @param <T> data
      */
-    public static <T> R<T> error(int code, String msg) {
-        return error(code, msg, null);
+    public static <T> R<T> exception(int code, String msg) {
+        return exception(code, msg, null);
     }
 
     /**
@@ -87,7 +87,7 @@ public class ResponseUtils {
      * @return ResponseEntity
      * @param <T> data
      */
-    public static <T> R<T> error(int code, String msg, T data) {
+    public static <T> R<T> exception(int code, String msg, T data) {
         return R.<T>builder().code(code).msg(msg).data(data).build();
     }
 }

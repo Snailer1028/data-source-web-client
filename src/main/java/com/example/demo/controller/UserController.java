@@ -1,11 +1,11 @@
 package com.example.demo.controller;
 
-import static com.example.demo.util.ResponseUtils.error;
+import static com.example.demo.util.ResponseUtils.exception;
 import static com.example.demo.util.ResponseUtils.success;
 
 import com.example.demo.entity.PageResult;
 import com.example.demo.entity.R;
-import com.example.demo.entity.User;
+import com.example.demo.entity.UserEntity;
 import com.example.demo.entity.UserVO;
 import com.example.demo.mapper.UserMapper;
 import com.example.demo.util.BeanUtils;
@@ -13,6 +13,9 @@ import com.example.demo.validator.Save;
 import com.example.demo.validator.Update;
 import com.example.demo.validator.ValidArrayList;
 
+import cn.dev33.satoken.stp.SaTokenInfo;
+import cn.dev33.satoken.stp.StpUtil;
+import cn.hutool.http.HttpStatus;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -49,9 +52,9 @@ public class UserController {
      * @param id id
      * @return R<UserVO>
      */
-    @GetMapping("{id}")
+    @GetMapping("/{id}")
     public R<UserVO> getUserById(@PathVariable @NotNull Integer id) {
-        User target = userMapper.selectById(id);
+        UserEntity target = userMapper.selectById(id);
         return success(BeanUtils.toBean(target, UserVO.class));
     }
 
@@ -63,7 +66,7 @@ public class UserController {
      */
     @GetMapping("/page")
     public R<PageResult<UserVO>> pageUser(@RequestBody @Validated UserVO userVO) {
-        PageResult<User> userPageResult = userMapper.selectPage(userVO);
+        PageResult<UserEntity> userPageResult = userMapper.selectPage(userVO);
         return success(BeanUtils.toBean(userPageResult, UserVO.class));
     }
 
@@ -89,8 +92,8 @@ public class UserController {
      */
     @PutMapping
     public R<Void> updateUser(@RequestBody @Validated(Update.class) ValidArrayList<UserVO> list) {
-        Boolean b = userMapper.updateBatch(BeanUtils.toBean(list, User.class));
-        return b ? success() : error("批量更新失败");
+        Boolean b = userMapper.updateBatch(BeanUtils.toBean(list, UserEntity.class));
+        return b ? success() : exception("批量更新失败");
     }
 
     /**
@@ -102,7 +105,29 @@ public class UserController {
      */
     @PostMapping
     public R<Void> saveBatchUser(@RequestBody @Validated(Save.class) ValidArrayList<UserVO> list) {
-        Boolean b = userMapper.insertBatch(BeanUtils.toBean(list, User.class));
-        return b ? success() : error("批量新增失败");
+        Boolean b = userMapper.insertBatch(BeanUtils.toBean(list, UserEntity.class));
+        return b ? success() : exception("批量新增失败");
+    }
+
+    @PostMapping("/login")
+    public R<UserEntity> doLogin(@RequestBody UserVO userVO) {
+        UserEntity userEntity = userMapper.selectOne(UserEntity::getUsername, userVO.getUsername(),
+                UserEntity::getPassword,
+                userVO.getPassword());
+        if (userEntity != null) {
+            StpUtil.login(userEntity.getId());
+            return success(userEntity);
+        }
+        return exception(HttpStatus.HTTP_FORBIDDEN, "登录失败");
+    }
+
+    @GetMapping("/info")
+    public R<SaTokenInfo> getInfo() {
+        int userId = StpUtil.getLoginIdAsInt();
+        System.out.println("userId = " + userId);
+
+        // 获取当前会话的 token 信息参数
+        SaTokenInfo tokenInfo = StpUtil.getTokenInfo();
+        return success(tokenInfo);
     }
 }

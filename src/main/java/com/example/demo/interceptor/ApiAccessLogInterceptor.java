@@ -4,13 +4,13 @@ import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.io.resource.ResourceUtil;
 import cn.hutool.core.util.StrUtil;
-import cn.hutool.extra.servlet.ServletUtil;
 import cn.hutool.extra.spring.SpringUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.util.StopWatch;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
+import org.springframework.web.util.ContentCachingRequestWrapper;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -32,10 +32,17 @@ public class ApiAccessLogInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
         if (isNotProd()) {
-            Map<String, String> queryString = ServletUtil.getParamMap(request);
-            String requestBody = isJsonRequest(request) ? ServletUtil.getBody(request) : null;
+            // 使用 ContentCachingRequestWrapper 封装请求, 防止getReader() has already been called for this request
+            if (!(request instanceof ContentCachingRequestWrapper)) {
+                request = new ContentCachingRequestWrapper(request);
+            }
 
-            // 打印 request 日志
+            // 获取请求参数和请求体
+            Map<String, String[]> queryString = request.getParameterMap();
+            String requestBody = this.isJsonRequest(request) ?
+                    this.getRequestBody((ContentCachingRequestWrapper) request) : null;
+
+            // 打印请求日志
             String url = request.getRequestURI();
             if (CollUtil.isEmpty(queryString) && StrUtil.isEmpty(requestBody)) {
                 log.info("[开始请求 URL({}) 无参数][preHandle]", url);
@@ -60,17 +67,29 @@ public class ApiAccessLogInterceptor implements HandlerInterceptor {
         // 打印 response 日志
         if (isNotProd()) {
             StopWatch stopWatch = (StopWatch) request.getAttribute(ATTRIBUTE_STOP_WATCH);
-            stopWatch.stop();
-            log.info("[完成请求 URL({}) 耗时({} ms)][afterCompletion]",
-                    request.getRequestURI(), stopWatch.getTotalTimeMillis());
+            if (stopWatch != null) {
+                stopWatch.stop();
+                log.info("[完成请求 URL({}) 耗时({} ms)][afterCompletion]",
+                        request.getRequestURI(), stopWatch.getTotalTimeMillis());
+            }
         }
     }
 
-    private static boolean isJsonRequest(HttpServletRequest request) {
+    private String getRequestBody(ContentCachingRequestWrapper request) {
+        try {
+            byte[] buf = request.getContentAsByteArray();
+            return new String(buf, request.getCharacterEncoding());
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return null;
+        }
+    }
+
+    private boolean isJsonRequest(HttpServletRequest request) {
         return StrUtil.startWithIgnoreCase(request.getContentType(), MediaType.APPLICATION_JSON_VALUE);
     }
 
-    private static boolean isNotProd() {
+    private boolean isNotProd() {
         return !"prod".equals(SpringUtil.getActiveProfile());
     }
 
@@ -98,6 +117,15 @@ public class ApiAccessLogInterceptor implements HandlerInterceptor {
                     lineNumber.get());
         } catch (Exception ignore) {
             // 忽略异常。原因：仅仅打印，非重要逻辑
+        }
+    }
+
+    private void printHandlerMethodPosition2(Object handler) {
+        if (handler instanceof HandlerMethod ) {
+            HandlerMethod handlerMethod = (HandlerMethod)handler;
+            Method method = handlerMethod.getMethod();
+            Class<?> clazz = method.getDeclaringClass();
+            log.info("当前Controller方法: {}.{}", clazz.getSimpleName(), method.getName());
         }
     }
 }

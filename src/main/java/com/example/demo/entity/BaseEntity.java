@@ -31,8 +31,4 @@ public class BaseEntity {
     @Null(message = "不需要填 updateTime")
     @TableField
     private LocalDateTime updateTime;
-
-    @Null(message = "不需要填 deleted")
-    @TableLogic
-    private Integer deleted;
 }
