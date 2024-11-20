@@ -1,8 +1,11 @@
-# Springboot 基础框架
+### Springboot基础框架【2023-05-20】 
 ```
 java 1.8
-sprinboot 2.7.18
-mybatis plus 3.5.5
+Sprinboot 2.7.18
+Mybatis plus 3.5.5
+```
 
-hutool和众多工具类，接口入参校验最佳实践
+### 集成SatokenRBAC,Redis【2024-11-20】
+```
+Satoken 版本：1.39.0
 ```
