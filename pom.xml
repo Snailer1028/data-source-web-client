@@ -62,6 +62,16 @@
             <artifactId>sa-token-spring-boot-starter</artifactId>
             <version>1.39.0</version>
         </dependency>
+        <dependency>
+            <groupId>cn.dev33</groupId>
+            <artifactId>sa-token-redis</artifactId>
+            <version>1.39.0</version>
+        </dependency>
+        <dependency>
+            <!-- 提供Redis连接池 -->
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-pool2</artifactId>
+        </dependency>
 
         <!--工具类-->
         <dependency>

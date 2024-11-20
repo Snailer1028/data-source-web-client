@@ -14,6 +14,21 @@ spring:
     url: jdbc:mysql://localhost:3306/test?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8&useSSL=false&allowMultiQueries=true
     username: root
     password: root
+  redis:
+    # Redis数据库索引（默认为0）
+    database: 0
+    host: 127.0.0.1
+    port: 6379
+    # Redis服务器连接密码（默认为空）
+    # password:
+    timeout: 10s
+    lettuce:
+      pool:
+        max-active: 200
+        # 连接池最大阻塞等待时间（使用负值表示没有限制）
+        max-wait: -1ms
+        max-idle: 10
+        min-idle: 0
 
 sa-token:
   # token 名称（同时也是 cookie 名称）

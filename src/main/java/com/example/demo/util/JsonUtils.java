@@ -104,6 +104,15 @@ public class JsonUtils {
     public static <T> T mapToObj(Object obj, Class<T> clazz) {
         return OBJECT_MAPPER.convertValue(obj, clazz);
     }
+
+    /**
+     * 获取ObjectMapper实例
+     *
+     * @return ObjectMapper
+     */
+    public static ObjectMapper getObjectMapper() {
+        return OBJECT_MAPPER;
+    }
 }
 
 /**
