@@ -18,6 +18,8 @@ public class RedisConfig {
     @Bean
     public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory factory) {
         RedisTemplate<String, Object> template = new RedisTemplate<>();
+        template.setConnectionFactory(factory);
+
         Jackson2JsonRedisSerializer<Object> jsonRedisSerializer = new Jackson2JsonRedisSerializer<>(Object.class);
         jsonRedisSerializer.setObjectMapper(this.getObjectMapper());
         StringRedisSerializer stringRedisSerializer = new StringRedisSerializer();
@@ -30,7 +32,6 @@ public class RedisConfig {
         template.setHashValueSerializer(jsonRedisSerializer);
         // 确保属性已经被设置
         template.afterPropertiesSet();
-        template.setConnectionFactory(factory);
         return template;
     }
 
