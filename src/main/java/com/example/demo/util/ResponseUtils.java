@@ -1,7 +1,7 @@
 package com.example.demo.util;
 
 
-import com.example.demo.model.entity.R;
+import com.example.demo.model.entity.common.R;
 
 import org.springframework.http.HttpStatus;
 

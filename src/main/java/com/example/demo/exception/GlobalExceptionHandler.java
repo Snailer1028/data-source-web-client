@@ -2,7 +2,7 @@ package com.example.demo.exception;
 
 import static com.example.demo.util.ResponseUtils.exception;
 
-import com.example.demo.model.entity.R;
+import com.example.demo.model.entity.common.R;
 
 import cn.dev33.satoken.exception.NotLoginException;
 import cn.dev33.satoken.exception.NotPermissionException;

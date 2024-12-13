@@ -3,8 +3,8 @@ package com.example.demo.controller;
 import static com.example.demo.util.ResponseUtils.exception;
 import static com.example.demo.util.ResponseUtils.success;
 
-import com.example.demo.model.entity.PageResult;
-import com.example.demo.model.entity.R;
+import com.example.demo.model.entity.common.PageResult;
+import com.example.demo.model.entity.common.R;
 import com.example.demo.model.entity.UserEntity;
 import com.example.demo.model.req.UserVO;
 import com.example.demo.mapper.UserMapper;

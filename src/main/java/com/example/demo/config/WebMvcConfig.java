@@ -31,7 +31,8 @@ public class WebMvcConfig implements WebMvcConfigurer {
                     SaRouter.match("/user/**", r -> StpUtil.checkPermission("/user/*"));
                 }))
                 .addPathPatterns("/**")
-                .excludePathPatterns("/user/login");
+                // .excludePathPatterns("/user/login");
+                .excludePathPatterns("/**");
     }
 
     /**

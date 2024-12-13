@@ -1,5 +1,6 @@
 package com.example.demo.mapper;
 
+import com.example.demo.mapper.query.BaseMapperX;
 import com.example.demo.model.entity.UserEntity;
 
 import org.apache.ibatis.annotations.Mapper;

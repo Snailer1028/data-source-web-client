@@ -1,4 +1,4 @@
-package com.example.demo.model.entity;
+package com.example.demo.model.entity.common;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 

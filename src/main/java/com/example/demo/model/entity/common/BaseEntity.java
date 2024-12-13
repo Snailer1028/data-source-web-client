@@ -1,7 +1,6 @@
-package com.example.demo.model.entity;
+package com.example.demo.model.entity.common;
 
 import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableLogic;
 
 import lombok.Data;
 

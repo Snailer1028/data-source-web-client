@@ -1,7 +1,7 @@
 package com.example.demo.model.req;
 
 import com.example.demo.enums.GenderEnum;
-import com.example.demo.model.entity.PageParam;
+import com.example.demo.model.entity.common.PageParam;
 import com.example.demo.validator.InEnum;
 import com.example.demo.validator.Mobile;
 import com.example.demo.validator.Save;

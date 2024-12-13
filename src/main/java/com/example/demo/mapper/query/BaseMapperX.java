@@ -1,4 +1,4 @@
-package com.example.demo.mapper;
+package com.example.demo.mapper.query;
 
 import com.baomidou.mybatisplus.annotation.DbType;
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
@@ -8,10 +8,10 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.support.SFunction;
 import com.baomidou.mybatisplus.extension.toolkit.Db;
-import com.example.demo.model.entity.PageParam;
-import com.example.demo.model.entity.PageResult;
-import com.example.demo.model.entity.SortablePageParam;
-import com.example.demo.model.entity.SortingField;
+import com.example.demo.model.entity.common.PageParam;
+import com.example.demo.model.entity.common.PageResult;
+import com.example.demo.model.entity.common.SortablePageParam;
+import com.example.demo.model.entity.common.SortingField;
 import com.example.demo.util.MyBatisUtils;
 import com.github.yulichang.base.MPJBaseMapper;
 import com.github.yulichang.interfaces.MPJBaseJoin;
