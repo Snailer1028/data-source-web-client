@@ -14,7 +14,6 @@ import java.util.concurrent.ConcurrentHashMap;
 @Slf4j
 @Component
 public class DynamicDataSource extends AbstractRoutingDataSource {
-
     // 存放数据源的 Map
     private static final Map<Object, Object> DATA_SOURCE_MAP = new ConcurrentHashMap<>();
 

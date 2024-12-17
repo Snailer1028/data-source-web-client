@@ -24,12 +24,12 @@ public class DataSourceServiceImpl implements DataSourceService {
     @Override
     public void addDataSource(DataSourceVO vo) {
         DataSourceEntity bean = BeanUtils.toBean(vo, DataSourceEntity.class);
-        bean.setUrl(this.toJDBCUrl(vo));
+        bean.setUrl(this.toJdbcUrl(vo));
         dataSourceMapper.insert(bean);
     }
 
     @SuppressWarnings("unchecked")
-    private String toJDBCUrl(DataSourceVO vo) {
+    private String toJdbcUrl(DataSourceVO vo) {
         DBTypeEnum type = DBTypeEnum.getEnumByCode(vo.getType());
         StringBuilder url = new StringBuilder(type.getJdbcPrefix() + vo.getHost() + ":" + vo.getPort());
         if (StrUtil.isNotBlank(vo.getDatabase())) {
@@ -50,7 +50,7 @@ public class DataSourceServiceImpl implements DataSourceService {
     @Override
     public void updateDataSource(DataSourceVO vo) {
         DataSourceEntity bean = BeanUtils.toBean(vo, DataSourceEntity.class);
-        bean.setUrl(this.toJDBCUrl(vo));
+        bean.setUrl(this.toJdbcUrl(vo));
         dataSourceMapper.updateDataSource(bean);
     }
 
