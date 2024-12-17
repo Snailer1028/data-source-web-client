@@ -62,7 +62,6 @@ public class DynamicDataSource extends AbstractRoutingDataSource {
             dataSource.setUsername(config.getUsername());
             dataSource.setPassword(config.getPassword());
             dataSource.setDriverClassName(DBTypeEnum.getEnumByCode(config.getType()).getDriver());
-
             // 将新数据源添加到 Map 中
             DATA_SOURCE_MAP.put(key, dataSource);
             // 重新设置目标数据源，让 Spring 重新加载数据源
@@ -73,5 +72,26 @@ public class DynamicDataSource extends AbstractRoutingDataSource {
             log.error(e.getMessage());
             return false;
         }
+    }
+
+    public void delDataSource(String connName) {
+        HikariDataSource removedDataSource = (HikariDataSource)DATA_SOURCE_MAP.remove(connName);
+        removedDataSource.close();
+        // 重新设置目标数据源，让 Spring 重新加载数据源
+        super.setTargetDataSources(DATA_SOURCE_MAP);
+        super.afterPropertiesSet();
+    }
+
+
+    public void updateDataSource(String key, DataSourceEntity config) {
+        HikariDataSource hikariDataSource = (HikariDataSource)DATA_SOURCE_MAP.get(key);
+        hikariDataSource.setJdbcUrl(config.getUrl());
+        hikariDataSource.setUsername(config.getUsername());
+        hikariDataSource.setPassword(config.getPassword());
+        hikariDataSource.setDriverClassName(DBTypeEnum.getEnumByCode(config.getType()).getDriver());
+
+        // 重新设置目标数据源，让 Spring 重新加载数据源
+        super.setTargetDataSources(DATA_SOURCE_MAP);
+        super.afterPropertiesSet();
     }
 }

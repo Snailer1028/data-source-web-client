@@ -31,6 +31,13 @@ public class DatasourceController {
         return success ? "数据源添加成功" : "数据源添加失败";
     }
 
+    // 添加新数据源
+    @PostMapping("/delete")
+    public String delDataSource(@RequestParam String connName) {
+        dynamicDataSource.delDataSource(connName);
+        return "数据源添加成功";
+    }
+
     // 切换数据源
     @PostMapping("/switch")
     public String switchDataSource(@RequestParam String name) {
@@ -39,7 +46,7 @@ public class DatasourceController {
     }
 
     @GetMapping("test")
-    public List<UserEntity> test(@RequestParam String key){
+    public List<UserEntity> test(@RequestParam String key) {
         DynamicDataSource.setDataSourceKey(key);
         List<UserEntity> userEntities = userMapper.selectTEST();
         DynamicDataSource.removeDataSourceKey();
